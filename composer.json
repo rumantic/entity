@@ -1,0 +1,29 @@
+{
+    "name": "sitebill/entity",
+    "description": "Sitebill Entity",
+    "license": "MIT",
+    "homepage": "https://www.sitebill.ru/",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Dmitriy Kondin",
+            "email": "dkondin@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sitebill\\Entity\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Sitebill\\Entity\\EntityServiceProvider"
+            ]
+        }
+    }
+}
