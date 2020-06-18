@@ -13,7 +13,7 @@ class EntityServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    //public $routeFilePath = '/routes/realty.php';
+    public $routeFilePath = '/routes/entity.php';
 
     /**
      * Register the application services.
@@ -21,7 +21,7 @@ class EntityServiceProvider extends ServiceProvider
     public function register()
     {
         // setup the routes
-        //$this->setupRoutes($this->app->router);
+        $this->setupRoutes($this->app->router);
 
         //$this->app->make('Sitebill\Sitebill');
         //$this->app->register('Sitebill\CRUD');
