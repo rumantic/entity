@@ -12,6 +12,8 @@ class Table extends Model
 
     protected $table = 'table';
     protected $primaryKey = 'table_id';
+    protected $fillable = ['name', 'description'];
+
 
     public $timestamps = true;
 

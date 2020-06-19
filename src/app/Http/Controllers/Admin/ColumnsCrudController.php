@@ -26,8 +26,16 @@ class ColumnsCrudController extends CrudController
     protected function setupListOperation()
     {
         CRUD::addColumn('name');
-        CRUD::addColumn('url');
-        CRUD::addColumn('parent');
+        CRUD::addColumn([
+            'label' => 'table_id',
+            'type' => 'select',
+            'name' => 'table_id',
+            'entity' => 'table',
+            'attribute' => 'name',
+        ]);
+
+        //CRUD::addColumn('url');
+        //CRUD::addColumn('parent');
         /*
         CRUD::addColumn([   // select_multiple: n-n relationship (with pivot table)
             'label'     => 'Articles', // Table column heading
@@ -59,6 +67,15 @@ class ColumnsCrudController extends CrudController
             'label' => 'Name',
         ]);
         CRUD::addField([
+            'label' => 'table_id',
+            'type' => 'select',
+            'name' => 'table_id',
+            'entity' => 'table',
+            'attribute' => 'name',
+        ]);
+
+        /*
+        CRUD::addField([
             'name' => 'url',
             'label' => 'Slug (URL)',
             'type' => 'text',
@@ -72,6 +89,7 @@ class ColumnsCrudController extends CrudController
             'entity' => 'parent',
             'attribute' => 'name',
         ]);
+        */
     }
 
     protected function setupUpdateOperation()

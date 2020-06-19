@@ -34,12 +34,14 @@ class TableCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->operation('list', function () {
-            $this->crud->addColumn('id');
+            $this->crud->addColumn('table_id');
             $this->crud->addColumn([
-                'name' => 'date_added',
-                'label' => 'Date',
-                'type' => 'date',
+                'name' => 'name',
+                'label' => 'name',
+                'type' => 'text',
             ]);
+
+            /*
             $this->crud->addColumn('active');
             $this->crud->addColumn('text');
             $this->crud->addColumn([
@@ -55,7 +57,6 @@ class TableCrudController extends CrudController
                 ],
             ]);
 
-            /*
             $this->crud->addColumn([
                 'name' => 'featured',
                 'label' => 'Featured',
@@ -99,20 +100,21 @@ class TableCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->operation(['create', 'update'], function () {
-            $this->crud->setValidation(DataRequest::class);
+            //$this->crud->setValidation(DataRequest::class);
 
             $this->crud->addField([
-                'name' => 'text',
+                'name' => 'name',
                 'label' => 'Text',
-                'type' => 'ckeditor',
+                'type' => 'text',
                 'placeholder' => 'Your title here',
             ]);
             $this->crud->addField([
-                'name' => 'date_added',
-                'label' => 'Date',
-                'type' => 'date',
-                'default' => date('Y-m-d'),
+                'name' => 'description',
+                'label' => 'description',
+                'type' => 'ckeditor',
             ]);
+            /*
+
             $this->crud->addField([
                 'label' => 'Topic',
                 'type' => 'select2_nested',
@@ -125,7 +127,6 @@ class TableCrudController extends CrudController
                 //'ajax' => true,
             ]);
 
-            /*
             $this->crud->addField([
                 'name' => 'content',
                 'label' => 'Content',
