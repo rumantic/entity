@@ -3,6 +3,7 @@ namespace Sitebill\Entity\app\Http\Controllers\Traits;
 
 use Facade\Ignition\Tabs\Tab;
 use Illuminate\Support\Facades\DB;
+use Sitebill\Entity\app\Models\Meta\Entity;
 use Sitebill\Entity\app\Models\TableGrids;
 
 trait Columns {
@@ -24,7 +25,14 @@ trait Columns {
         foreach ( $grid_columns['grid_fields'] as $column ) {
             //$this->column
 
-            $this->crud->addColumn($column);
+            $entity = $model->get_entity($column);
+
+            $this->crud->addColumn([
+                    'name' => $entity->name(),
+                    'label' => $entity->title(),
+                    'type' => 'text',
+                ]
+            );
         }
 
         /*

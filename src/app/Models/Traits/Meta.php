@@ -3,6 +3,8 @@ namespace Sitebill\Entity\app\Models\Traits;
 
 use Illuminate\Support\Facades\DB;
 use Sitebill\Entity\app\Models\Config;
+use Sitebill\Entity\app\Models\Meta\Entity;
+use Illuminate\Support\Facades\Log;
 
 trait Meta {
     /**
@@ -15,22 +17,17 @@ trait Meta {
      */
     private static $model_cache;
 
+    private $activity_and_group;
+
     protected $meta_loaded = false;
 
     function is_meta_loaded () {
         return $this->meta_loaded;
     }
 
-
-    function load_sitebill($ignore_user_group = false, $ignore_activity = false) {
-        // Log::info('load_sitebill!! = '.$table_name);
-        $table_name = $this->getTable();
-        if ( empty($table_name) ) {
-            throw (new \Exception('table_name not defined'));
-        }
+    private function set_group_id ($ignore_user_group) {
         $group_id = 0;
         $anonimouse_group = intval(Config::getConfig('user_anonimouse_group_id'));
-
         if (isset($_SESSION['user_id_value']) && intval($_SESSION['user_id_value']) > 0) {
             $user_id = intval($_SESSION['user_id_value']);
         } elseif (isset($_SESSION['user_id']) && intval($_SESSION['user_id']) > 0) {
@@ -42,16 +39,39 @@ trait Meta {
         } elseif (!$ignore_user_group && (!isset($user_id) || $user_id == 0)) {
             $group_id = $anonimouse_group;
         }
-        $input_table_name = $this->sitebill_table;
+        $this->group_id = $group_id;
+    }
+
+    private function get_group_id () {
+        return $this->group_id;
+    }
+
+    private function set_group_and_activity ($ignore_user_group, $ignore_activity) {
+        $local_activity_and_group = '_' . ($ignore_user_group ? '1' : '0') . '_' . ($ignore_activity ? '1' : '0');
+        $this->set_group_id($ignore_user_group);
+
+        if ($this->get_group_id() != 0) {
+            $local_activity_and_group .= '_' . $this->get_group_id();
+        }
+        $this->activity_and_group = $local_activity_and_group;
+    }
+
+    private function get_group_and_activity () {
+        return $this->activity_and_group;
+    }
 
 
-        $model_name = $table_name . '_' . ($ignore_user_group ? '1' : '0') . '_' . ($ignore_activity ? '1' : '0');
-
-        if ($group_id != 0) {
-            $model_name .= '_' . $group_id;
+    function load_sitebill($ignore_user_group = false, $ignore_activity = false) {
+        $table_name = $this->getTable();
+        Log::info('load_sitebill = '.$table_name);
+        if ( empty($table_name) ) {
+            throw (new \Exception('table_name not defined'));
         }
 
         $current_lang = config('app.locale');
+        $this->set_group_and_activity($ignore_user_group, $ignore_activity);
+        $model_name = $table_name.$this->get_group_and_activity();
+        $group_id = $this->get_group_id();
 
         /**
          * TODO
@@ -85,10 +105,7 @@ trait Meta {
                 $ar = (array)$ar_object;
 
                 $table_name = $ar['table_name'];
-                $model_name = $table_name . '_' . ($ignore_user_group ? '1' : '0') . '_' . ($ignore_activity ? '1' : '0');
-                if ($group_id != 0) {
-                    $model_name .= '_' . $group_id;
-                }
+                $model_name = $table_name.$this->get_group_and_activity();
 
                 /**
                  * TODO
@@ -211,25 +228,20 @@ trait Meta {
         return self::$model_storage[$input_model_name];
     }
 
-    public function get_column($column_name): ?Column {
-        if ( !empty($this->sitebill_table) ) {
-            $table_name = $this->sitebill_table;
+    public function get_entity($column_name): ?Entity {
+        Log::info('column_name = '.$column_name);
+        $result = array();
+        $table_name_with_group_and_activity = $this->getTable().$this->get_group_and_activity();
+        $table_name = $this->getTable();
+        if ( !empty(self::$model_storage[$table_name_with_group_and_activity][$table_name][$column_name]) ) {
+            $result = self::$model_storage[$table_name_with_group_and_activity][$table_name][$column_name];
+            $entity = new Entity($result);
         } else {
-            $table_name = $this->getTable();
+            $entity = new Entity(null);
+            //throw (new \Exception('column = '.$column_name.' in table = '.$table_name.' not defined'));
         }
 
-        if ( empty(self::$model_cache) ) {
-            if ( empty(self::$model_storage) ) {
-                self::load_sitebill($table_name);
-            }
-            self::$model_cache = self::load_sitebill($table_name);
-        }
-        //dd($model);
-        $result = array();
-        if ( !empty(self::$model_cache[$table_name][$column_name]) ) {
-            $result = self::$model_cache[$table_name][$column_name];
-        }
-        return new Column($result);
+        return $entity;
     }
 
     function unserializeSelectData($str) {
