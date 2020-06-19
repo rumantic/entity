@@ -6,10 +6,14 @@ use Illuminate\Support\Facades\DB;
 use Sitebill\Entity\app\Models\TableGrids;
 
 trait Columns {
+
     public function getEntityColumns () {
         $model = $this->crud->getModel();
         $user = auth()->user();
         $user_id = $user->id;
+        if ( !$model->is_meta_loaded() ) {
+            $model->load_sitebill();
+        }
 
         $grid_columns = $this->get_grid_columns($model->getTable(), $user_id);
         if ( !$grid_columns ) {
@@ -18,6 +22,8 @@ trait Columns {
         //dd($grid_columns);
 
         foreach ( $grid_columns['grid_fields'] as $column ) {
+            //$this->column
+
             $this->crud->addColumn($column);
         }
 
