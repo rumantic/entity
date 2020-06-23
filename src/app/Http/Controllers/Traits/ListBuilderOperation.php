@@ -2,6 +2,7 @@
 namespace Sitebill\Entity\app\Http\Controllers\Traits;
 
 use Illuminate\Support\Facades\Route;
+use Sitebill\Entity\app\Models\TableGrids;
 
 trait ListBuilderOperation {
     /**
@@ -33,7 +34,6 @@ trait ListBuilderOperation {
     {
         //$this->crud->set('reorder.enabled', true);
         $this->crud->allowAccess('list_builder');
-        $this->setupListBuilderFiels();
 
         $this->crud->operation('list_builder', function () {
 
@@ -69,27 +69,32 @@ trait ListBuilderOperation {
 
     protected function setupListBuilderFiels () {
         $this->crud->operation('list_builder', function () {
+            $value = $this->get_table_grids();
+
+            $model = $this->crud->getModel();
+            $columns = $model->get_all_columns();
+            $columns_keys = array_keys($columns);
+            //dd($columns_keys);
+
             $this->crud->addField(
                 [ // select_and_order
                     'name'    => 'select_and_order',
                     'label'   => 'Выбрать колонки для таблицы',
                     'type'    => 'select_and_order',
-                    'options' => [
-                        1 => 'Option 1',
-                        2 => 'Option 2',
-                        3 => 'Option 3',
-                        4 => 'Option 4',
-                        5 => 'Option 5',
-                        6 => 'Option 6',
-                        7 => 'Option 7',
-                        8 => 'Option 8',
-                        9 => 'Option 9',
-                    ],
+                    'options' => $columns_keys,
+                    'value' => [1,2,3],
+
+
                     'fake' => false,
                     //'tab'  => 'Selects',
                 ]
             );
         });
+    }
+
+    private function get_table_grids () {
+        $table_grids = TableGrids::where('action_code', 'data_user_0')->first();
+        return json_decode($table_grids->grid_fields);
     }
 
 
@@ -98,7 +103,7 @@ trait ListBuilderOperation {
         //$this->crud->setOperation('ListBuilder');
         $this->data['crud'] = $this->crud;
         $this->crud->setupDefaultSaveActions();
-
+        $this->setupListBuilderFiels();
 
         $this->data['saveAction'] = $this->crud->getSaveAction();
 
@@ -106,6 +111,8 @@ trait ListBuilderOperation {
     }
 
     public function saveList (Request $request = null) {
+        TableGrids::where('action_code', 'street_user_0')
+            ->update(['grid_fields' => 'test']);
 
         \Alert::success(trans('sitebill::entity.table_settings_updated'))->flash();
         // save the redirect choice for next time

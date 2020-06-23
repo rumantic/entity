@@ -244,6 +244,20 @@ trait Meta {
         return $entity;
     }
 
+    public function get_all_columns () {
+        if ( !$this->is_meta_loaded() ) {
+            $this->load_sitebill();
+        }
+
+        $table_name_with_group_and_activity = $this->getTable().$this->get_group_and_activity();
+        $table_name = $this->getTable();
+        if ( !empty(self::$model_storage[$table_name_with_group_and_activity][$table_name]) ) {
+            $result = self::$model_storage[$table_name_with_group_and_activity][$table_name];
+            return $result;
+        }
+        return null;
+    }
+
     function unserializeSelectData($str) {
         $ret = array();
         $matches = array();
