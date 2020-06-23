@@ -33,30 +33,6 @@ class EntityCrudController extends CrudController
     protected function getEntityRequest () {
         return $this->entity_request;
     }
-    protected function setupListBuilderFiels () {
-        $this->crud->operation('list_builder', function () {
-            $this->crud->addField(
-                [ // select_and_order
-                    'name'    => 'select_and_order',
-                    'label'   => 'Выбрать колонки для таблицы',
-                    'type'    => 'select_and_order',
-                    'options' => [
-                        1 => 'Option 1',
-                        2 => 'Option 2',
-                        3 => 'Option 3',
-                        4 => 'Option 4',
-                        5 => 'Option 5',
-                        6 => 'Option 6',
-                        7 => 'Option 7',
-                        8 => 'Option 8',
-                        9 => 'Option 9',
-                    ],
-                    'fake' => false,
-                    //'tab'  => 'Selects',
-                ]
-            );
-        });
-    }
 
     protected function setupList () {
         $this->crud->operation('list', function () {

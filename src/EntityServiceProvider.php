@@ -73,6 +73,7 @@ class EntityServiceProvider extends ServiceProvider
      */
     public function boot(Router $router, Dispatcher $event)
     {
+        $this->loadTranslationsFrom(realpath(__DIR__.'/resources/lang'), 'sitebill');
         //$this->loadViewsFrom(__DIR__.'/../resources/views', 'sitebill_entity');
         $this->loadViewsWithFallbacks();
         //$this->loadRoutesFrom(__DIR__.'/../routes/routes.php');

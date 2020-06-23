@@ -33,6 +33,7 @@ trait ListBuilderOperation {
     {
         //$this->crud->set('reorder.enabled', true);
         $this->crud->allowAccess('list_builder');
+        $this->setupListBuilderFiels();
 
         $this->crud->operation('list_builder', function () {
 
@@ -66,6 +67,32 @@ trait ListBuilderOperation {
         });
     }
 
+    protected function setupListBuilderFiels () {
+        $this->crud->operation('list_builder', function () {
+            $this->crud->addField(
+                [ // select_and_order
+                    'name'    => 'select_and_order',
+                    'label'   => 'Выбрать колонки для таблицы',
+                    'type'    => 'select_and_order',
+                    'options' => [
+                        1 => 'Option 1',
+                        2 => 'Option 2',
+                        3 => 'Option 3',
+                        4 => 'Option 4',
+                        5 => 'Option 5',
+                        6 => 'Option 6',
+                        7 => 'Option 7',
+                        8 => 'Option 8',
+                        9 => 'Option 9',
+                    ],
+                    'fake' => false,
+                    //'tab'  => 'Selects',
+                ]
+            );
+        });
+    }
+
+
 
     public function showList (Request $request = null) {
         //$this->crud->setOperation('ListBuilder');
@@ -80,7 +107,7 @@ trait ListBuilderOperation {
 
     public function saveList (Request $request = null) {
 
-        \Alert::success(trans('backpack::crud.insert_success'))->flash();
+        \Alert::success(trans('sitebill::entity.table_settings_updated'))->flash();
         // save the redirect choice for next time
         //$this->crud->setSaveAction();
         return \Redirect::to($this->crud->route);
