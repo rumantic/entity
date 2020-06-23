@@ -14,9 +14,11 @@ class EntityCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ReorderOperation;
     //use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
 
     use \Sitebill\Entity\app\Http\Controllers\Traits\Columns;
+    use \Sitebill\Entity\app\Http\Controllers\Traits\ListBuilderOperation;
 
     protected $entity_request;
 
@@ -24,14 +26,41 @@ class EntityCrudController extends CrudController
         $this->entity_request = $entity_request;
     }
 
+    protected function defaultSetup() {
+        $this->setupListBuilderFiels();
+    }
+
     protected function getEntityRequest () {
         return $this->entity_request;
+    }
+    protected function setupListBuilderFiels () {
+        $this->crud->operation('list_builder', function () {
+            $this->crud->addField(
+                [ // select_and_order
+                    'name'    => 'select_and_order',
+                    'label'   => 'Выбрать колонки для таблицы',
+                    'type'    => 'select_and_order',
+                    'options' => [
+                        1 => 'Option 1',
+                        2 => 'Option 2',
+                        3 => 'Option 3',
+                        4 => 'Option 4',
+                        5 => 'Option 5',
+                        6 => 'Option 6',
+                        7 => 'Option 7',
+                        8 => 'Option 8',
+                        9 => 'Option 9',
+                    ],
+                    'fake' => false,
+                    //'tab'  => 'Selects',
+                ]
+            );
+        });
     }
 
     protected function setupList () {
         $this->crud->operation('list', function () {
             $this->getEntityColumns();
-            $this->crud->addButton('top', 'list_builder', 'view', 'sitebill_entity::buttons.list_builder', 'end');
 
 
             /*

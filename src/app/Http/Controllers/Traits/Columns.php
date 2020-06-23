@@ -59,12 +59,6 @@ trait Columns {
         */
     }
 
-    public function list_builder () {
-        $this->data['crud'] = $this->crud;
-
-        return view('sitebill_entity::list.builder', $this->data);
-    }
-
     private function get_grid_columns($model_name, $user_id) {
         $used_fields = array();
         $action_code = $this->get_grid_action_code($model_name, $user_id);

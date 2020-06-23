@@ -33,17 +33,17 @@
             @include('crud::inc.grouped_errors')
 
             <form method="post"
-                  action="{{ url($crud->route) }}"
-                  @if ($crud->hasUploadFields('create'))
+                  action="{{ url($crud->route.'/list_builder') }}"
+                  @if ($crud->hasUploadFields('list_builder'))
                   enctype="multipart/form-data"
                     @endif
             >
             {!! csrf_field() !!}
             <!-- load the view from the application if it exists, otherwise load the one in the package -->
                 @if(view()->exists('vendor.backpack.crud.form_content'))
-                    @include('vendor.backpack.crud.form_content', [ 'fields' => $crud->fields(), 'action' => 'create' ])
+                    @include('vendor.backpack.crud.form_content', [ 'fields' => $crud->fields(), 'action' => 'list_builder' ])
                 @else
-                    @include('crud::form_content', [ 'fields' => $crud->fields(), 'action' => 'create' ])
+                    @include('crud::form_content', [ 'fields' => $crud->fields(), 'action' => 'list_builder' ])
                 @endif
 
                 @include('crud::inc.form_save_buttons')
