@@ -1,6 +1,7 @@
 <?php
 namespace Sitebill\Entity\app\Http\Controllers\Traits;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Sitebill\Entity\app\Models\Meta\EntityItem;
 use Sitebill\Entity\app\Models\TableGrids;
@@ -70,35 +71,20 @@ trait ListBuilderOperation {
 
     protected function setupListBuilderFiels () {
         $this->crud->operation('list_builder', function () {
-            $value = $this->get_table_grids();
-
             $model = $this->crud->getModel();
             $columns = $model->get_all_columns();
             $columns->get('id');
             foreach ( $columns as $key => $entity_item ) {
                 $select_items[$key] = $entity_item->title();
-
             }
-
-            //$columns_keys = array_keys($columns);
-
-            $collection = collect(['name' => 'taylor', 'framework' => 'laravel']);
-            //dd($collection);
-
-            $value = $collection->get('name');
-            //dd($value);
-            //dd($columns->get('id'));
-
             $this->crud->addField(
                 [ // select_and_order
-                    'name'    => 'select_and_order',
+                    'name'    => 'grid_fields',
                     'label'   => 'Выбрать колонки для таблицы',
                     'type'    => 'select_and_order',
                     'options' => $select_items,
-                    'value' => ['id','user_id','topic_id'],
-
-
-                    'fake' => false,
+                    'value' => $this->get_table_grids(),
+                    'fake' => true,
                     //'tab'  => 'Selects',
                 ]
             );
@@ -106,13 +92,13 @@ trait ListBuilderOperation {
     }
 
     private function get_table_grids () {
-        $table_grids = TableGrids::where('action_code', 'data_user_0')->first();
+        $table_grids = TableGrids::where('action_code', $this->get_action_code())->first();
         return json_decode($table_grids->grid_fields);
     }
 
 
 
-    public function showList (Request $request = null) {
+    public function showList () {
         //$this->crud->setOperation('ListBuilder');
         $this->data['crud'] = $this->crud;
         $this->crud->setupDefaultSaveActions();
@@ -123,13 +109,14 @@ trait ListBuilderOperation {
         return view('sitebill_entity::list.builder', $this->data);
     }
 
-    public function saveList (Request $request = null) {
-        TableGrids::where('action_code', 'street_user_0')
-            ->update(['grid_fields' => 'test']);
+    public function saveList () {
+        $request = $this->crud->validateRequest();
+
+        TableGrids::where('action_code', $this->get_action_code())
+            ->update(['grid_fields' => $request->input('grid_fields')]);
 
         \Alert::success(trans('sitebill::entity.table_settings_updated'))->flash();
-        // save the redirect choice for next time
-        //$this->crud->setSaveAction();
+
         return \Redirect::to($this->crud->route);
 
     }

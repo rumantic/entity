@@ -82,4 +82,11 @@ trait Columns {
         return $action;
     }
 
+    public function get_action_code () {
+        $model = $this->crud->getModel();
+        $user = auth()->user();
+        $user_id = $user->id;
+        return $this->get_grid_action_code($model->getTable(), $user_id);
+    }
+
 }
