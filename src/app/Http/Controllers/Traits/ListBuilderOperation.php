@@ -2,6 +2,7 @@
 namespace Sitebill\Entity\app\Http\Controllers\Traits;
 
 use Illuminate\Support\Facades\Route;
+use Sitebill\Entity\app\Models\Meta\EntityItem;
 use Sitebill\Entity\app\Models\TableGrids;
 
 trait ListBuilderOperation {
@@ -73,16 +74,28 @@ trait ListBuilderOperation {
 
             $model = $this->crud->getModel();
             $columns = $model->get_all_columns();
-            $columns_keys = array_keys($columns);
-            //dd($columns_keys);
+            $columns->get('id');
+            foreach ( $columns as $key => $entity_item ) {
+                $select_items[$key] = $entity_item->title();
+
+            }
+
+            //$columns_keys = array_keys($columns);
+
+            $collection = collect(['name' => 'taylor', 'framework' => 'laravel']);
+            //dd($collection);
+
+            $value = $collection->get('name');
+            //dd($value);
+            //dd($columns->get('id'));
 
             $this->crud->addField(
                 [ // select_and_order
                     'name'    => 'select_and_order',
                     'label'   => 'Выбрать колонки для таблицы',
                     'type'    => 'select_and_order',
-                    'options' => $columns_keys,
-                    'value' => [1,2,3],
+                    'options' => $select_items,
+                    'value' => ['id','user_id','topic_id'],
 
 
                     'fake' => false,

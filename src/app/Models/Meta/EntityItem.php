@@ -2,7 +2,7 @@
 
 namespace Sitebill\Entity\app\Models\Meta;
 
-class Entity {
+class EntityItem {
     private $column;
 
     public function __construct($column )

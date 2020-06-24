@@ -3,8 +3,9 @@ namespace Sitebill\Entity\app\Models\Traits;
 
 use Illuminate\Support\Facades\DB;
 use Sitebill\Entity\app\Models\Config;
-use Sitebill\Entity\app\Models\Meta\Entity;
+use Sitebill\Entity\app\Models\Meta\EntityItem;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Collection;
 
 trait Meta {
     /**
@@ -21,6 +22,57 @@ trait Meta {
 
     protected $meta_loaded = false;
 
+    public function get_entity($column_name): ?EntityItem {
+        Log::info('column_name = '.$column_name);
+        $result = array();
+        $table_name_with_group_and_activity = $this->getTable().$this->get_group_and_activity();
+        $table_name = $this->getTable();
+        if ( !empty(self::$model_storage[$table_name_with_group_and_activity][$table_name][$column_name]) ) {
+            $result = self::$model_storage[$table_name_with_group_and_activity][$table_name][$column_name];
+            $entity = new EntityItem($result);
+        } else {
+            $entity = new EntityItem(null);
+            //throw (new \Exception('column = '.$column_name.' in table = '.$table_name.' not defined'));
+        }
+
+        return $entity;
+    }
+
+    public function get_all_columns () {
+        if ( !$this->is_meta_loaded() ) {
+            $this->load_sitebill();
+        }
+
+        $table_name_with_group_and_activity = $this->getTable().$this->get_group_and_activity();
+        $table_name = $this->getTable();
+        if ( !empty(self::$model_storage[$table_name_with_group_and_activity][$table_name]) ) {
+            $columns = self::$model_storage[$table_name_with_group_and_activity][$table_name];
+            $result = collect();
+            foreach ( $columns as $column_name => $column_item ) {
+                $result->put($column_name, new EntityItem($column_item));
+            }
+            return $result;
+        }
+        return null;
+    }
+
+    function unserializeSelectData($str) {
+        $ret = array();
+        $matches = array();
+        preg_match_all('/\{[^\}]+\}/', $str, $matches);
+        if (count($matches) > 0) {
+            foreach ($matches[0] as $v) {
+                $v = str_replace(array('{', '}'), '', $v);
+                $d = explode('~~', $v);
+                $ret[$d[0]] = $d[1];
+            }
+        }
+        return $ret;
+    }
+
+    public function getPrimaryKeyName () {
+        return $this->primaryKey;
+    }
     function is_meta_loaded () {
         return $this->meta_loaded;
     }
@@ -227,53 +279,4 @@ trait Meta {
 
         return self::$model_storage[$input_model_name];
     }
-
-    public function get_entity($column_name): ?Entity {
-        Log::info('column_name = '.$column_name);
-        $result = array();
-        $table_name_with_group_and_activity = $this->getTable().$this->get_group_and_activity();
-        $table_name = $this->getTable();
-        if ( !empty(self::$model_storage[$table_name_with_group_and_activity][$table_name][$column_name]) ) {
-            $result = self::$model_storage[$table_name_with_group_and_activity][$table_name][$column_name];
-            $entity = new Entity($result);
-        } else {
-            $entity = new Entity(null);
-            //throw (new \Exception('column = '.$column_name.' in table = '.$table_name.' not defined'));
-        }
-
-        return $entity;
-    }
-
-    public function get_all_columns () {
-        if ( !$this->is_meta_loaded() ) {
-            $this->load_sitebill();
-        }
-
-        $table_name_with_group_and_activity = $this->getTable().$this->get_group_and_activity();
-        $table_name = $this->getTable();
-        if ( !empty(self::$model_storage[$table_name_with_group_and_activity][$table_name]) ) {
-            $result = self::$model_storage[$table_name_with_group_and_activity][$table_name];
-            return $result;
-        }
-        return null;
-    }
-
-    function unserializeSelectData($str) {
-        $ret = array();
-        $matches = array();
-        preg_match_all('/\{[^\}]+\}/', $str, $matches);
-        if (count($matches) > 0) {
-            foreach ($matches[0] as $v) {
-                $v = str_replace(array('{', '}'), '', $v);
-                $d = explode('~~', $v);
-                $ret[$d[0]] = $d[1];
-            }
-        }
-        return $ret;
-    }
-
-    public function getPrimaryKeyName () {
-        return $this->primaryKey;
-    }
-
 }
