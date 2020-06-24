@@ -38,30 +38,6 @@ trait ListBuilderOperation {
         $this->crud->allowAccess('list_builder');
 
         $this->crud->operation('list_builder', function () {
-
-            //$this->crud->loadDefaultOperationSettingsFromConfig();
-            // $this->crud->addButton('bottom', 'list_builder', 'view', 'sitebill_entity::buttons.list_builder', 'end');
-            /*
-            $this->crud->addSaveAction([
-                'name' => 'save_action_one',
-                'redirect' => function($crud, $request, $itemId) {
-                    return $crud->route;
-                }, // what's the redirect URL, where the user will be taken after saving?
-
-                // OPTIONAL:
-                'button_text' => 'Custom save message', // override text appearing on the button
-                // You can also provide translatable texts, for example:
-                // 'button_text' => trans('backpack::crud.save_action_one'),
-                'visible' => function($crud) {
-                    return true;
-                }, // customize when this save action is visible for the current operation
-                'referrer' => function($crud, $request, $itemId) {
-                    return $crud->route;
-                }, // override http_referrer_url
-                'order' => 1, // change the order save actions are in
-            ]);
-            */
-
         });
 
         $this->crud->operation('list', function () {
@@ -73,7 +49,6 @@ trait ListBuilderOperation {
         $this->crud->operation('list_builder', function () {
             $model = $this->crud->getModel();
             $columns = $model->get_all_columns();
-            $columns->get('id');
             foreach ( $columns as $key => $entity_item ) {
                 $select_items[$key] = $entity_item->title();
             }

@@ -34,29 +34,6 @@ trait Columns {
                 ]
             );
         }
-
-        /*
-        $this->crud->addColumn('id');
-        $this->crud->addColumn([
-            'name' => 'date_added',
-            'label' => 'Date',
-            'type' => 'date',
-        ]);
-        $this->crud->addColumn('active');
-        $this->crud->addColumn('text');
-        $this->crud->addColumn([
-            'label' => 'Topic',
-            'type' => 'select',
-            'name' => 'topic_id',
-            'entity' => 'topic',
-            'attribute' => 'name',
-            'wrapper'   => [
-                'href' => function ($crud, $column, $entry, $related_key) {
-                    return backpack_url('topic/'.$related_key.'/show');
-                },
-            ],
-        ]);
-        */
     }
 
     private function get_grid_columns($model_name, $user_id) {
