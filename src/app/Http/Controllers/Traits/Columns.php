@@ -36,6 +36,22 @@ trait Columns {
         }
     }
 
+    protected function getEntityFormFields () {
+        $model = $this->crud->getModel();
+        $columns = $model->get_all_columns();
+        foreach ( $columns as $key => $entity_item ) {
+            $this->crud->addField(
+                [ // select_and_order
+                    'name'    => $entity_item->name(),
+                    'label'   => $entity_item->title(),
+                    'type'    => 'text',
+                    'tab'  => $entity_item->tab(),
+                ]
+            );
+        }
+
+    }
+
     private function get_grid_columns($model_name, $user_id) {
         $used_fields = array();
         $action_code = $this->get_grid_action_code($model_name, $user_id);

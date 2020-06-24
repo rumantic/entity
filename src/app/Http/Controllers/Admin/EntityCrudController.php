@@ -45,30 +45,7 @@ class EntityCrudController extends CrudController
     protected function setupCreateAndUpdate () {
         $this->crud->operation(['create', 'update'], function () {
             $this->crud->setValidation($this->getEntityRequest());
-
-            $this->crud->addField([
-                'name' => 'text',
-                'label' => 'Text',
-                'type' => 'ckeditor',
-                'placeholder' => 'Your title here',
-            ]);
-            $this->crud->addField([
-                'name' => 'date_added',
-                'label' => 'Date',
-                'type' => 'date',
-                'default' => date('Y-m-d'),
-            ]);
-            $this->crud->addField([
-                'label' => 'Topic',
-                'type' => 'select2_nested',
-                'name' => 'topic_id',
-                'entity' => 'topic',
-                'attribute' => 'name',
-                'inline_create' => true,
-                'model' => "Sitebill\Realty\app\Models\Topic", // force foreign key model
-
-                //'ajax' => true,
-            ]);
+            $this->getEntityFormFields();
         });
 
     }
