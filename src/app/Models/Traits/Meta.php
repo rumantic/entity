@@ -54,21 +54,20 @@ trait Meta {
             foreach ( $columns as $column_name => $column_item ) {
                 $entity_item = new EntityItem($column_item);
                 if ( $entity_item->type() == 'select_by_query' ) {
-
-                    Log::info('try select by query '.$entity_item->name().'_rel'.', table_name = '.$entity_item->primary_key_table());
                     self::addDynamicRelation($entity_item->name().'_rel', $entity_item, function($model, EntityItem $entity_item) {
-                        //Log::info('inside name = '.$name);
-                        Log::info('inside '.$entity_item->name().', table_name = '.$entity_item->primary_key_table());
-                        //if ($entity_item->primary_key_table() == 'currency') {
-                            $class = currency::class;
-                        //} else {
-                            //$class = null;
-                        //}
+                        if ( !class_exists($entity_item->primary_key_table()) ) {
+                            $aClass = 'class '.$entity_item->primary_key_table().' extends Illuminate\Database\Eloquent\Model {
+                                    protected $table = \''.$entity_item->primary_key_table().'\';
+                                    protected $primaryKey = \''.$entity_item->primary_key_name().'\';
+                                } return new '.$entity_item->primary_key_table().';';
+                            $class = eval($aClass);
+                        } else {
+                            $aClass = "return new ".$entity_item->primary_key_table().";";
+                            $class = eval($aClass);
+                        }
                         return $model->hasMany($class);
                     });
-
                 }
-
                 $result->put($column_name, $entity_item);
 
             }
