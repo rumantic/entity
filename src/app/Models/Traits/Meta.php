@@ -59,10 +59,10 @@ trait Meta {
                             $aClass = 'class '.$entity_item->primary_key_table().' extends Illuminate\Database\Eloquent\Model {
                                     protected $table = \''.$entity_item->primary_key_table().'\';
                                     protected $primaryKey = \''.$entity_item->primary_key_name().'\';
-                                } return new '.$entity_item->primary_key_table().';';
+                                } return '.$entity_item->primary_key_table().'::class;';
                             $class = eval($aClass);
                         } else {
-                            $aClass = "return new ".$entity_item->primary_key_table().";";
+                            $aClass = "return ".$entity_item->primary_key_table()."::class;";
                             $class = eval($aClass);
                         }
                         return $model->hasMany($class);
