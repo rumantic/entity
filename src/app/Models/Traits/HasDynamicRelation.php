@@ -11,16 +11,19 @@ trait HasDynamicRelation
      * @var array
      */
     private static $dynamic_relations = [];
+    private static $entity_storage = [];
 
     /**
      * Add a new relation
      *
      * @param $name
+     * @param EntityItem $entity_item
      * @param $closure
      */
-    public static function addDynamicRelation($name, $closure)
+    public static function addDynamicRelation($name, EntityItem $entity_item, $closure)
     {
         static::$dynamic_relations[$name] = $closure;
+        static::$entity_storage[$name] = $entity_item;
     }
 
     /**
@@ -72,7 +75,7 @@ trait HasDynamicRelation
     public function __call($name, $arguments)
     {
         if (static::hasDynamicRelation($name)) {
-            return call_user_func(static::$dynamic_relations[$name], $this);
+            return call_user_func(static::$dynamic_relations[$name], $this, static::$entity_storage[$name]);
         }
 
         return parent::__call($name, $arguments);

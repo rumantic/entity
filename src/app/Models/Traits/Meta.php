@@ -25,11 +25,6 @@ trait Meta {
 
     protected $meta_loaded = false;
 
-    /**
-     * @var EntityItem
-     */
-    protected $current_entity_item;
-
     public function get_entity($column_name): ?EntityItem {
         Log::info('column_name = '.$column_name);
         $result = array();
@@ -59,12 +54,16 @@ trait Meta {
             foreach ( $columns as $column_name => $column_item ) {
                 $entity_item = new EntityItem($column_item);
                 if ( $entity_item->type() == 'select_by_query' ) {
-                    $this->current_entity_item = $entity_item;
-                    self::addDynamicRelation($entity_item->name().'_rel', function($model) {
-                        Log::info('try select by query '.$this->current_entity_item->name().', table_name = '.$this->current_entity_item->primary_key_table());
-                        if ($this->current_entity_item->primary_key_table() == 'currency') {
+
+                    Log::info('try select by query '.$entity_item->name().'_rel'.', table_name = '.$entity_item->primary_key_table());
+                    self::addDynamicRelation($entity_item->name().'_rel', $entity_item, function($model, EntityItem $entity_item) {
+                        //Log::info('inside name = '.$name);
+                        Log::info('inside '.$entity_item->name().', table_name = '.$entity_item->primary_key_table());
+                        //if ($entity_item->primary_key_table() == 'currency') {
                             $class = currency::class;
-                        }
+                        //} else {
+                            //$class = null;
+                        //}
                         return $model->hasMany($class);
                     });
 
