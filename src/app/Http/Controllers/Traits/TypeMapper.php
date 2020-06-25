@@ -161,6 +161,26 @@ trait TypeMapper {
         ];
     }
 
+    protected function select_by_query_map ( EntityItem $entity_item ) {
+        return [
+            'name'    => $entity_item->name(),
+            'label'   => $entity_item->title(),
+            'default' => $entity_item->value(),
+            'type'    => 'select2',
+            'entity'    => $entity_item->name().'_rel',
+            'attribute'    => $entity_item->value_name(),
+            'tab'  => $entity_item->tab(),
+            'hint' => $entity_item->hint(),
+            //'prefix' => '',
+            //'suffix' => '',
+            'attributes' => [
+                'placeholder' => $entity_item->title(),
+                //'class'       => 'form-control some-class',
+                //'readonly'    => 'readonly',
+                //'disabled'    => 'disabled',
+            ],
+        ];
+    }
 
     protected function date_map ( EntityItem $entity_item ) {
         return [

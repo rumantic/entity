@@ -6,8 +6,11 @@ use Sitebill\Entity\app\Models\Config;
 use Sitebill\Entity\app\Models\Meta\EntityItem;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
+use Sitebill\Realty\app\Models\currency;
 
 trait Meta {
+    use HasDynamicRelation;
+
     /**
      * @var mixed
      */
@@ -21,6 +24,11 @@ trait Meta {
     private $activity_and_group;
 
     protected $meta_loaded = false;
+
+    /**
+     * @var EntityItem
+     */
+    protected $current_entity_item;
 
     public function get_entity($column_name): ?EntityItem {
         Log::info('column_name = '.$column_name);
@@ -49,7 +57,21 @@ trait Meta {
             $columns = self::$model_storage[$table_name_with_group_and_activity][$table_name];
             $result = collect();
             foreach ( $columns as $column_name => $column_item ) {
-                $result->put($column_name, new EntityItem($column_item));
+                $entity_item = new EntityItem($column_item);
+                if ( $entity_item->type() == 'select_by_query' ) {
+                    $this->current_entity_item = $entity_item;
+                    self::addDynamicRelation($entity_item->name().'_rel', function($model) {
+                        Log::info('try select by query '.$this->current_entity_item->name().', table_name = '.$this->current_entity_item->primary_key_table());
+                        if ($this->current_entity_item->primary_key_table() == 'currency') {
+                            $class = currency::class;
+                        }
+                        return $model->hasMany($class);
+                    });
+
+                }
+
+                $result->put($column_name, $entity_item);
+
             }
             return $result;
         }
