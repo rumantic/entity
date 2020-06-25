@@ -82,6 +82,84 @@ trait TypeMapper {
     }
 
 
+    protected function checkbox_map ( EntityItem $entity_item ) {
+        return [
+            'name'    => $entity_item->name(),
+            'label'   => $entity_item->title(),
+            'default' => $entity_item->value(),
+            'type'    => 'checkbox',
+            'tab'  => $entity_item->tab(),
+            'hint' => $entity_item->hint(),
+            //'prefix' => '',
+            //'suffix' => '',
+            'attributes' => [
+                'placeholder' => $entity_item->title(),
+                //'class'       => 'form-control some-class',
+                //'readonly'    => 'readonly',
+                //'disabled'    => 'disabled',
+            ],
+        ];
+    }
+
+    protected function price_map ( EntityItem $entity_item ) {
+        return [
+            'name'    => $entity_item->name(),
+            'label'   => $entity_item->title(),
+            'default' => $entity_item->value(),
+            'type'    => 'number',
+            'tab'  => $entity_item->tab(),
+            'hint' => $entity_item->hint(),
+            'prefix' => 'руб.',
+            //'suffix' => '',
+            'attributes' => [
+                'placeholder' => $entity_item->title(),
+                "step" => "1000",
+                //'class'       => 'form-control some-class',
+                //'readonly'    => 'readonly',
+                //'disabled'    => 'disabled',
+            ],
+        ];
+    }
+
+    protected function textarea_map ( EntityItem $entity_item ) {
+        return [
+            'name'    => $entity_item->name(),
+            'label'   => $entity_item->title(),
+            'default' => $entity_item->value(),
+            'type'    => 'textarea',
+            'tab'  => $entity_item->tab(),
+            'hint' => $entity_item->hint(),
+            //'prefix' => '',
+            //'suffix' => '',
+            'attributes' => [
+                'placeholder' => $entity_item->title(),
+                //'class'       => 'form-control some-class',
+                //'readonly'    => 'readonly',
+                //'disabled'    => 'disabled',
+            ],
+        ];
+    }
+
+    protected function uploads_map ( EntityItem $entity_item ) {
+        return [
+            'name'    => $entity_item->name(),
+            'label'   => $entity_item->title(),
+            'default' => $entity_item->value(),
+            'type'    => 'upload_multiple',
+            'upload'  => true,
+            'disk'    => 'uploads',
+            'tab'  => $entity_item->tab(),
+            'hint' => $entity_item->hint(),
+            //'prefix' => '',
+            //'suffix' => '',
+            'attributes' => [
+                'placeholder' => $entity_item->title(),
+                //'class'       => 'form-control some-class',
+                //'readonly'    => 'readonly',
+                //'disabled'    => 'disabled',
+            ],
+        ];
+    }
 
 
     protected function date_map ( EntityItem $entity_item ) {
