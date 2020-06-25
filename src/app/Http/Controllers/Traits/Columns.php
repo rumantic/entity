@@ -1,12 +1,15 @@
 <?php
 namespace Sitebill\Entity\app\Http\Controllers\Traits;
 
+use Clockwork\Request\Log;
 use Facade\Ignition\Tabs\Tab;
 use Illuminate\Support\Facades\DB;
 use Sitebill\Entity\app\Models\Meta\Entity;
+use Sitebill\Entity\app\Models\Meta\EntityItem;
 use Sitebill\Entity\app\Models\TableGrids;
 
 trait Columns {
+    use TypeMapper;
 
     public function getEntityColumns () {
         $model = $this->crud->getModel();
@@ -27,12 +30,7 @@ trait Columns {
 
             $entity = $model->get_entity($column);
 
-            $this->crud->addColumn([
-                    'name' => $entity->name(),
-                    'label' => $entity->title(),
-                    'type' => 'text',
-                ]
-            );
+            $this->crud->addColumn($this->get_mapped_entity_item($entity));
         }
     }
 
@@ -40,16 +38,19 @@ trait Columns {
         $model = $this->crud->getModel();
         $columns = $model->get_all_columns();
         foreach ( $columns as $key => $entity_item ) {
-            $this->crud->addField(
-                [ // select_and_order
-                    'name'    => $entity_item->name(),
-                    'label'   => $entity_item->title(),
-                    'type'    => 'text',
-                    'tab'  => $entity_item->tab(),
-                ]
-            );
+            $this->crud->addField($this->get_mapped_entity_item($entity_item));
         }
+    }
 
+    protected function get_mapped_entity_item ( EntityItem $entity_item ) {
+        $method_map_name = $entity_item->type().'_map';
+        if ( method_exists($this, $method_map_name) ) {
+            $mapped_column = $this->$method_map_name($entity_item);
+        } else {
+            \Illuminate\Support\Facades\Log::info('$method_map_name = '.$method_map_name);
+            $mapped_column = $this->default_map($entity_item);
+        }
+        return $mapped_column;
     }
 
     private function get_grid_columns($model_name, $user_id) {

@@ -90,6 +90,11 @@ class EntityItem {
         return $this->get_array_value('action');
     }
 
+    public function select_data() {
+        return $this->get_array_value('select_data');
+    }
+
+
     public function tab() {
         return (empty($this->get_array_value('tab')) ? trans('sitebill::entity.main_tab') : $this->get_array_value('tab'));
     }
