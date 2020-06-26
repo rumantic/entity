@@ -1,6 +1,7 @@
 <?php
 namespace Sitebill\Entity\app\Http\Controllers\Traits;
 
+use Clockwork\Request\Log;
 use Sitebill\Entity\app\Models\Meta\EntityItem;
 
 trait TypeMapper {
@@ -162,7 +163,7 @@ trait TypeMapper {
     }
 
     protected function select_by_query_map ( EntityItem $entity_item ) {
-        return [
+        $item = [
             'name'    => $entity_item->name(),
             'label'   => $entity_item->title(),
             'default' => $entity_item->value(),
@@ -180,6 +181,81 @@ trait TypeMapper {
                 //'disabled'    => 'disabled',
             ],
         ];
+        //\Illuminate\Support\Facades\Log::info($item);
+        return $item;
+    }
+
+    protected function geodata_map ( EntityItem $entity_item ) {
+        $item = [
+            'name'    => $entity_item->name(),
+            'label'   => $entity_item->title(),
+            //'default' => $entity_item->value(),
+            'type'    => 'view',
+            'view'    => 'sitebill_entity::fields.geodata',
+            //'entity'    => $entity_item->name().'_rel',
+            //'attribute'    => $entity_item->value_name(),
+            'tab'  => $entity_item->tab(),
+            'hint' => $entity_item->hint(),
+            'fake' => true,
+            //'prefix' => '',
+            //'suffix' => '',
+            'attributes' => [
+                'placeholder' => $entity_item->title(),
+                //'class'       => 'form-control some-class',
+                //'readonly'    => 'readonly',
+                //'disabled'    => 'disabled',
+            ],
+        ];
+        //\Illuminate\Support\Facades\Log::info($item);
+        return $item;
+    }
+
+    protected function compose_map ( EntityItem $entity_item ) {
+        $item = [
+            'name'    => $entity_item->name(),
+            'label'   => $entity_item->title(),
+            //'default' => $entity_item->value(),
+            'type'    => 'text',
+            //'entity'    => $entity_item->name().'_rel',
+            //'attribute'    => $entity_item->value_name(),
+            'tab'  => $entity_item->tab(),
+            'hint' => $entity_item->hint(),
+            'fake' => true,
+            //'prefix' => '',
+            //'suffix' => '',
+            'attributes' => [
+                'placeholder' => $entity_item->title(),
+                //'class'       => 'form-control some-class',
+                //'readonly'    => 'readonly',
+                //'disabled'    => 'disabled',
+            ],
+        ];
+        //\Illuminate\Support\Facades\Log::info($item);
+        return $item;
+    }
+
+    protected function injector_map ( EntityItem $entity_item ) {
+        $item = [
+            'name'    => $entity_item->name(),
+            'label'   => $entity_item->title(),
+            //'default' => $entity_item->value(),
+            'type'    => 'text',
+            //'entity'    => $entity_item->name().'_rel',
+            //'attribute'    => $entity_item->value_name(),
+            'tab'  => $entity_item->tab(),
+            'hint' => $entity_item->hint(),
+            'fake' => true,
+            //'prefix' => '',
+            //'suffix' => '',
+            'attributes' => [
+                'placeholder' => $entity_item->title(),
+                //'class'       => 'form-control some-class',
+                //'readonly'    => 'readonly',
+                //'disabled'    => 'disabled',
+            ],
+        ];
+        //\Illuminate\Support\Facades\Log::info($item);
+        return $item;
     }
 
     protected function date_map ( EntityItem $entity_item ) {

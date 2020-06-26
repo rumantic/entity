@@ -15,9 +15,7 @@ trait Columns {
         $model = $this->crud->getModel();
         $user = auth()->user();
         $user_id = $user->id;
-        if ( !$model->is_meta_loaded() ) {
-            $model->load_sitebill();
-        }
+        $columns = $model->get_all_columns();
 
         $grid_columns = $this->get_grid_columns($model->getTable(), $user_id);
         if ( !$grid_columns ) {

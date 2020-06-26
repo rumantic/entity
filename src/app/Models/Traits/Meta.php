@@ -45,6 +45,7 @@ trait Meta {
         if ( !$this->is_meta_loaded() ) {
             $this->load_sitebill();
         }
+        //Log::info('get_all_columns');
 
         $table_name_with_group_and_activity = $this->getTable().$this->get_group_and_activity();
         $table_name = $this->getTable();
@@ -55,6 +56,10 @@ trait Meta {
                 $entity_item = new EntityItem($column_item);
                 if ( $entity_item->type() == 'select_by_query' ) {
                     self::addDynamicRelation($entity_item->name().'_rel', $entity_item, function($model, EntityItem $entity_item) {
+                        //Log::info($entity_item->name().'_rel');
+                        //Log::info($entity_item->primary_key_table());
+                        //Log::info($entity_item->primary_key_name());
+
                         if ( !class_exists($entity_item->primary_key_table()) ) {
                             $aClass = 'class '.$entity_item->primary_key_table().' extends Illuminate\Database\Eloquent\Model {
                                     protected $table = \''.$entity_item->primary_key_table().'\';
@@ -69,6 +74,7 @@ trait Meta {
                     });
                 }
                 $result->put($column_name, $entity_item);
+                //$fillable[] = $column_name;
 
             }
             return $result;
