@@ -5,6 +5,8 @@ use Clockwork\Request\Log;
 use Sitebill\Entity\app\Models\Meta\EntityItem;
 
 trait TypeMapper {
+    use TypeMapperList;
+
     protected function dtdatetime_map ( EntityItem $entity_item ) {
         return [
             'name'    => $entity_item->name(),
@@ -110,7 +112,7 @@ trait TypeMapper {
             'type'    => 'number',
             'tab'  => $entity_item->tab(),
             'hint' => $entity_item->hint(),
-            'prefix' => 'руб.',
+            //'prefix' => 'руб.',
             //'suffix' => '',
             'attributes' => [
                 'placeholder' => $entity_item->title(),
@@ -172,6 +174,11 @@ trait TypeMapper {
             'attribute'    => $entity_item->value_name(),
             'tab'  => $entity_item->tab(),
             'hint' => $entity_item->hint(),
+
+            //'options'   => (function ($query) {
+            //    return $query->get();
+            //}), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+
             //'prefix' => '',
             //'suffix' => '',
             'attributes' => [

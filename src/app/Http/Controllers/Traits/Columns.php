@@ -28,7 +28,7 @@ trait Columns {
 
             $entity = $model->get_entity($column);
 
-            $this->crud->addColumn($this->get_mapped_entity_item($entity));
+            $this->crud->addColumn($this->get_mapped_entity_item($entity, true));
         }
     }
 
@@ -40,9 +40,16 @@ trait Columns {
         }
     }
 
-    protected function get_mapped_entity_item ( EntityItem $entity_item ) {
+    protected function get_mapped_entity_item ( EntityItem $entity_item, $list = false ) {
+
         $method_map_name = $entity_item->type().'_map';
-        if ( method_exists($this, $method_map_name) ) {
+        $method_map_name_list = null;
+        if ( $list ) {
+            $method_map_name_list = $entity_item->type().'_map_list';
+        }
+        if ( method_exists($this, $method_map_name_list) ) {
+            $mapped_column = $this->$method_map_name_list($entity_item);
+        } elseif ( method_exists($this, $method_map_name) ) {
             $mapped_column = $this->$method_map_name($entity_item);
         } else {
             \Illuminate\Support\Facades\Log::info('$method_map_name = '.$method_map_name);

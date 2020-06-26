@@ -64,13 +64,14 @@ trait Meta {
                             $aClass = 'class '.$entity_item->primary_key_table().' extends Illuminate\Database\Eloquent\Model {
                                     protected $table = \''.$entity_item->primary_key_table().'\';
                                     protected $primaryKey = \''.$entity_item->primary_key_name().'\';
+                                    protected $guarded = [\''.$entity_item->primary_key_name().'\'];
                                 } return '.$entity_item->primary_key_table().'::class;';
                             $class = eval($aClass);
                         } else {
                             $aClass = "return ".$entity_item->primary_key_table()."::class;";
                             $class = eval($aClass);
                         }
-                        return $model->hasMany($class);
+                        return $model->hasMany($class, $entity_item->primary_key_name(), $entity_item->name());
                     });
                 }
                 $result->put($column_name, $entity_item);
