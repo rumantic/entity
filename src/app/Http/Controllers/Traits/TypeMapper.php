@@ -284,6 +284,11 @@ trait TypeMapper {
         ];
     }
 
+    protected function checklist_map ( EntityItem $entity_item ) {
+        return $entity_item->get_column_array();
+    }
+
+
 
     protected function default_map ( EntityItem $entity_item ) {
         return [

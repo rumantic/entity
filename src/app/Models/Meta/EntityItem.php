@@ -18,6 +18,26 @@ class EntityItem {
         return $this->get_array_value('title');
     }
 
+    public function label() {
+        return $this->get_array_value('label');
+    }
+
+    public function entity() {
+        return $this->get_array_value('entity');
+    }
+
+    public function attribute() {
+        return $this->get_array_value('attribute');
+    }
+
+    public function model() {
+        return $this->get_array_value('model');
+    }
+
+    public function pivot() {
+        return $this->get_array_value('pivot');
+    }
+
     public function value() {
         return $this->get_array_value('value');
     }
@@ -111,10 +131,6 @@ class EntityItem {
         return $this->get_array_value('group_id');
     }
 
-    public function entity() {
-        return $this->get_array_value('entity');
-    }
-
     public function combo() {
         return $this->get_array_value('combo');
     }
@@ -129,6 +145,10 @@ class EntityItem {
 
     public function unique() {
         return ($this->get_array_value('unique') == 'on');
+    }
+
+    public function get_column_array() {
+        return $this->column;
     }
 
     private function get_array_value ($key) {
