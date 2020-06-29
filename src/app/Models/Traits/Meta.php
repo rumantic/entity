@@ -34,7 +34,12 @@ trait Meta {
             $result = self::$model_storage[$table_name_with_group_and_activity][$table_name][$column_name];
             $entity = new EntityItem($result);
         } else {
-            $entity = new EntityItem(null);
+            $all_columns = $this->get_all_columns();
+            if ( !empty($all_columns) ) {
+                $entity = $all_columns->get($column_name);
+            } else {
+                $entity = new EntityItem(null);
+            }
             //throw (new \Exception('column = '.$column_name.' in table = '.$table_name.' not defined'));
         }
 

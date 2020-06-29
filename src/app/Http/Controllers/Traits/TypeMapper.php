@@ -174,7 +174,8 @@ trait TypeMapper {
             'attribute'    => $entity_item->value_name(),
             'tab'  => $entity_item->tab(),
             'hint' => $entity_item->hint(),
-
+            //'ajax'          => true,
+            //'inline_create'      => true,
             //'options'   => (function ($query) {
             //    return $query->get();
             //}), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select

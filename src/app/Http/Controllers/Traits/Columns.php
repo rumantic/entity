@@ -58,7 +58,7 @@ trait Columns {
         return $mapped_column;
     }
 
-    private function get_grid_columns($model_name, $user_id) {
+    protected function get_grid_columns($model_name, $user_id) {
         $used_fields = array();
         $action_code = $this->get_grid_action_code($model_name, $user_id);
         $rows = DB::table('table_grids')->where('action_code', $action_code)->first();
