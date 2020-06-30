@@ -81,7 +81,7 @@ class EntityServiceProvider extends ServiceProvider
 
     public function loadViewsWithFallbacks()
     {
-        $customBaseFolder = resource_path('views/vendor/sitebill');
+        $customBaseFolder = resource_path('views/vendor/sitebill/entity');
 
         // - first the published/overwritten views (in case they have any changes)
         if (file_exists($customBaseFolder)) {
