@@ -286,7 +286,11 @@ trait Meta {
                 self::$model_storage[$model_name][$table_name][$ar['name']]['entity'] = $ar['entity'];
                 self::$model_storage[$model_name][$table_name][$ar['name']]['combo'] = $ar['combo'];
                 if ($ar['parameters'] != '' && $ar['parameters'] != '0') {
-                    self::$model_storage[$model_name][$table_name][$ar['name']]['parameters'] = unserialize($ar['parameters']);
+                    try {
+                        self::$model_storage[$model_name][$table_name][$ar['name']]['parameters'] = unserialize($ar['parameters']);
+                    } catch (\Exception $e ) {
+                        self::$model_storage[$model_name][$table_name][$ar['name']]['parameters'] = \GuzzleHttp\json_decode($ar['parameters']);
+                    }
                 }
 
                 if ($ar['required']) {

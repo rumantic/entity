@@ -288,7 +288,13 @@ trait TypeMapper {
         return $entity_item->get_column_array();
     }
 
+    protected function select2_multiple_map ( EntityItem $entity_item ) {
+        return $entity_item->get_column_array();
+    }
 
+    protected function table_map ( EntityItem $entity_item ) {
+        return $entity_item->get_column_array();
+    }
 
     protected function default_map ( EntityItem $entity_item ) {
         return [

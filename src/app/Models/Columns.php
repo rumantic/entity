@@ -33,6 +33,24 @@ class Columns extends Model
                 'type' => 'checkbox',
                 'required' => 'off',
             ],
+            'dbtype' => [
+                'name' => 'dbtype',
+                'title' => 'Хранить значение поля в таблице',
+                'type' => 'checkbox',
+                'required' => 'off',
+            ],
+            'required' => [
+                'name' => 'required',
+                'title' => 'Обязательное поле',
+                'type' => 'checkbox',
+                'required' => 'off',
+            ],
+            'unique' => [
+                'name' => 'unique',
+                'title' => 'Уникальное поле',
+                'type' => 'checkbox',
+                'required' => 'off',
+            ],
             'sort_order' => [
                 'name' => 'sort_order',
                 'title' => 'Порядок сортировки',
@@ -50,18 +68,36 @@ class Columns extends Model
                 'title_default' => 'выбрать таблицу',
                 'value_default' => 0,
             ],
-            'name' => [
-                'name' => 'name',
-                'title' => 'Название колонки (системное только латиница)',
-                'type' => 'safe_string',
-                'required' => 'on',
-            ],
             'type' => [
                 'name' => 'type',
                 'title' => 'Тип записи',
                 'type' => 'select_box',
                 'required' => 'on',
                 'select_data' => $this->get_types(),
+            ],
+            'name' => [
+                'name' => 'name',
+                'title' => 'Название колонки (системное только латиница)',
+                'type' => 'safe_string',
+                'required' => 'on',
+            ],
+            'title' => [
+                'name' => 'title',
+                'title' => 'Название колонки (для человека)',
+                'type' => 'safe_string',
+                'required' => 'on',
+            ],
+            'hint' => [
+                'name' => 'hint',
+                'title' => 'Подсказка',
+                'type' => 'safe_string',
+                'required' => 'off',
+            ],
+            'tab' => [
+                'name' => 'tab',
+                'title' => 'Имя вкладки в форме. Если не указано, то размешается во вкладке по-умолчанию',
+                'type' => 'safe_string',
+                'required' => 'off',
             ],
             'group_id' => [
                 'label'     => 'Доступен для ролей (по-умолчанию доступно всем)',
@@ -73,6 +109,126 @@ class Columns extends Model
                 'pivot'     => true,
                 'tab'       => 'Основное',
             ],
+            'active_in_topic' => [
+                'name' => 'active_in_topic',
+                'title' => 'Активно в категории (по-умолчанию активно везде)',
+                'type' => 'select_by_query',
+                'required' => 'off',
+                'primary_key_name' => 'id',
+                'primary_key_table' => 'topic',
+                'value_name' => 'name',
+                'title_default' => 'выбрать категорию',
+                'value_default' => 0,
+            ],
+            'value' => [
+                'name' => 'value',
+                'title' => 'Значение по-умолчанию',
+                'type' => 'safe_string',
+                'required' => 'off',
+            ],
+            'primary_key_table' => [
+                'name' => 'primary_key_table',
+                'title' => 'Название таблицы из которой получаем данные для связки',
+                'type' => 'safe_string', // @todo: определить тип
+                'required' => 'off',
+            ],
+            'primary_key_name' => [
+                'name' => 'primary_key_name',
+                'title' => 'Название ключа связки с другой таблицей',
+                'type' => 'safe_string', // @todo: определить тип
+                'required' => 'off',
+            ],
+            'value_name' => [
+                'name' => 'value_name',
+                'title' => 'Название переменной для select_box',
+                'type' => 'safe_string', // @todo: определить тип
+                'required' => 'off',
+            ],
+            /*
+            'query' => [
+                'name' => 'query',
+                'title' => 'SQL-запрос для получения списка записей из связанной таблицы',
+                'type' => 'safe_string', // @todo: определить тип
+                'required' => 'off',
+            ],
+            */
+            'title_default' => [
+                'name' => 'title_default',
+                'title' => 'Заголовок строчки в select_box по-умолчанию',
+                'type' => 'safe_string', // @todo: определить тип
+                'required' => 'off',
+            ],
+            'value_default' => [
+                'name' => 'value_default',
+                'title' => 'Значение строчки в select_box по-умолчанию',
+                'type' => 'safe_string', // @todo: определить тип
+                'required' => 'off',
+            ],
+            'value_table' => [
+                'name' => 'value_table',
+                'title' => 'value_table',
+                'type' => 'safe_string', // @todo: определить тип
+                'required' => 'off',
+            ],
+            'value_primary_key' => [
+                'name' => 'value_primary_key',
+                'title' => 'value_primary_key',
+                'type' => 'safe_string', // @todo: определить тип
+                'required' => 'off',
+            ],
+            'value_field' => [
+                'name' => 'value_field',
+                'title' => 'value_field',
+                'type' => 'safe_string', // @todo: определить тип
+                'required' => 'off',
+            ],
+            'assign_to' => [
+                'name' => 'assign_to',
+                'title' => 'assign_to',
+                'type' => 'safe_string', // @todo: определить тип
+                'required' => 'off',
+            ],
+            'select_data' => [
+                'name' => 'select_data',
+                'title' => 'Набор опций выбора в формате пар {key~~value}',
+                'type' => 'textarea',
+                'required' => 'off',
+            ],
+            'entity' => [
+                'name' => 'entity',
+                'title' => 'Сущность структуры',
+                'type' => 'safe_string',
+                'required' => 'off',
+            ],
+            [
+                'name'            => 'parameters',
+                'label'           => 'Параметры',
+                'type'            => 'table',
+                'entity_singular' => 'параметр', // used on the "Add X" button
+                'columns'         => [
+                    'name'  => 'Название',
+                    'value'  => 'Значение',
+                ],
+                //'max' => 5, // maximum rows allowed in the table
+                'min' => 0, // minimum rows allowed in the table
+                'tab' => 'Параметры',
+            ],
+            /*
+            [
+                'label'             => 'Активно в категории (по-умолчанию активно везде)',
+                'type'              => 'select2_multiple',
+                'name'              => 'active_in_topic', // the method that defines the relationship in your Model
+                'entity'            => 'topic_id_rel', // the method that defines the relationship in your Model
+                'attribute'         => 'id', // foreign key attribute that is shown to user
+                'model'             => "Sitebill\Realty\app\Models\Topic", // foreign key model
+                'allows_null'       => true,
+                'pivot'             => true, // on create&update, do you need to add/delete pivot table entries?
+                'tab'               => 'Основное',
+                'wrapperAttributes' => ['class' => 'form-group col-md-6'],
+            ],
+            */
+
+
 
             /*
             'group_id' => [
@@ -148,6 +304,11 @@ class Columns extends Model
     public function group_id_rel()
     {
         return $this->belongsTo('Backpack\PermissionManager\app\Models\Role', 'id');
+    }
+
+    public function active_in_topic_rel()
+    {
+        return $this->belongsTo('Sitebill\Realty\app\Models\Topic', 'id');
     }
 
 
