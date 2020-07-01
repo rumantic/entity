@@ -6,7 +6,6 @@
       $crud->entity_name_plural => url($crud->route),
       trans('backpack::crud.add') => false,
     ];
-
     // if breadcrumbs aren't defined in the CrudController, use the default breadcrumbs
     $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
 @endphp
