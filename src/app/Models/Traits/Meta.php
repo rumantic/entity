@@ -46,6 +46,23 @@ trait Meta {
         return $entity;
     }
 
+    public function prepareJoins () {
+        $columns = $this->get_all_columns();
+        foreach ( $columns as $m_column ) {
+            $ra_columns[] = ['data' => $m_column->name(), 'name' => $m_column->name(), 'title' => $m_column->title()];
+            if ($m_column->type() == 'select_by_query') {
+                $joins[] = [
+                    'table'=>$m_column->primary_key_table(),
+                    'first' => $m_column->table_name().'.'.$m_column->name(),
+                    'operator' => '=',
+                    'second' => $m_column->primary_key_table().'.'.$m_column->primary_key_name(),
+                    'select' => $m_column->primary_key_table().'.'.$m_column->value_name().' as '.$m_column->primary_key_table().'_name'];
+            }
+        }
+        return $joins;
+    }
+
+
     public function get_all_columns () {
         if ( !$this->is_meta_loaded() ) {
             $this->load_sitebill();
