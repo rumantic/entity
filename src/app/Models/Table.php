@@ -21,5 +21,10 @@ class Table extends Model
     {
         return $this->hasMany('Columns', 'table_id');
     }
+    
+    public function openColumns($crud = false)
+    {
+        return '<a class="btn btn-sm btn-link" target="_blank" href="'.url($crud->route.'/'.$this->table_id.'/columns').'"><i class="la la-list"></i> Список свойств</a>';
+    }
 
 }

@@ -46,7 +46,23 @@ trait TypeMapperList {
             ],
         ];
         */
-        \Illuminate\Support\Facades\Log::info($item);
         return $item;
     }
+
+    protected function select_box_structure_map_list ( EntityItem $entity_item ) {
+
+        $item = [
+            'name'    => $entity_item->name(),
+            'label'   => $entity_item->title(),
+
+            'type'    => 'select',
+            'entity'    => $entity_item->name().'_rel',
+            'attribute'    => 'name',
+            'attributes' => [
+                'placeholder' => $entity_item->title(),
+            ],
+        ];
+        return $item;
+    }
+
 }

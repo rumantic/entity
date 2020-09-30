@@ -4,6 +4,7 @@ namespace Sitebill\Entity\app\Http\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Sitebill\Realty\app\Http\Requests\DataRequest;
+use Illuminate\Support\Facades\Route;
 
 class TableCrudController extends CrudController
 {
@@ -15,7 +16,32 @@ class TableCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-    //use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;    
+    
+    
+    
+    
+    
+    protected function setupTableColumnsRoutes($segment, $routeName, $controller)
+    {
+        Route::get($segment.'/{id}/columns', [
+            'as'        => $routeName.'.columns',
+            'uses'      => $controller.'@columns',
+            'operation' => 'columns',
+        ]);
+    }
+    
+    public function columns($id)
+    {
+        $this->data['entry'] = $this->crud->getEntry($id);
+        $this->data['crud'] = $this->crud;
+        $this->data['title'] = 'Moderate '.$this->crud->entity_name;
+        $this->data['columns'] = \Sitebill\Entity\app\Models\Columns::all()->where('table_id', $id)->sortBy('name')->toArray();
+        //print_r($this->data['columns']);
+        return view("sitebill_entity::list.columns", $this->data);
+    }
+    
+    
 
     public function setup()
     {
@@ -34,12 +60,15 @@ class TableCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->operation('list', function () {
+            //
             $this->crud->addColumn('table_id');
             $this->crud->addColumn([
                 'name' => 'name',
                 'label' => 'name',
                 'type' => 'text',
             ]);
+            $this->crud->addButtonFromModelFunction('line', 'table_columns', 'openColumns', 'end');
+            
 
             /*
             $this->crud->addColumn('active');

@@ -193,6 +193,37 @@ trait TypeMapper {
         return $item;
     }
 
+    protected function select_box_structure_map ( EntityItem $entity_item ) {
+        $item = [
+            'name'    => $entity_item->name(),
+            'label'   => $entity_item->title(),
+            'default' => $entity_item->value(),
+            'type'    => 'view',
+            'view'    => 'sitebill_entity::fields.select_box_structure',
+            'entity'    => $entity_item->name().'_rel',
+            'attribute'    => 'name',
+            'tab'  => $entity_item->tab(),
+            'hint' => $entity_item->hint(),
+            //'ajax'          => true,
+            //'inline_create'      => true,
+            //'options'   => (function ($query) {
+            //    return $query->get();
+            //}), // force the related options to be a custom query, instead of all(); you can use this to filter the results show in the select
+
+            //'prefix' => '',
+            //'suffix' => '',
+            'attributes' => [
+                'placeholder' => $entity_item->title(),
+                //'class'       => 'form-control some-class',
+                //'readonly'    => 'readonly',
+                //'disabled'    => 'disabled',
+            ],
+        ];
+        //\Illuminate\Support\Facades\Log::info($item);
+        return $item;
+    }
+
+
     protected function geodata_map ( EntityItem $entity_item ) {
         $item = [
             'name'    => $entity_item->name(),

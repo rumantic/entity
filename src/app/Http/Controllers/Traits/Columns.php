@@ -19,7 +19,7 @@ trait Columns {
 
         $grid_columns = $this->get_grid_columns($model->getTable(), $user_id);
         if ( !$grid_columns ) {
-            return false;
+            $grid_columns['grid_fields'] = $columns->keys()->slice(0,5);
         }
         //dd($grid_columns);
 
